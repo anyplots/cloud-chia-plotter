@@ -43,7 +43,7 @@ Different user experiences may vary, depending on your network and the plotting 
 <pre>
 download from U.S. based plotting server at the following countries(bandwidth 1 Gbit/s):
 US > 1000Mbit/s
-GE > 1000Mbit/s
+DE > 1000Mbit/s
 UK > 1000Mbit/s
 FR > 1000Mbit/s
 JP > 900Mbit/s
