@@ -10,7 +10,8 @@ https://anyplots.com The marketplace to buy and sell chia plots
 <pre>
 -p  project token ( get it from your project page https://anyplots.com/buy-chia-plot/projects ), such as(40 chars):
     -p 000005e13f5fc456753081edf7dcc98986dcffa15 
-    
+
+
 -d  directories for save plots, separate multiple directories with semicolons, such as:
     -d  /mnt/d/;/mnt/e/;/mnt/f/
     -d  d:\;e:\;f:\
@@ -47,13 +48,13 @@ Invoke-WebRequest -Uri  https://github.com/anyplots/cloud-chia-plotter/releases/
 Different user experiences may vary, depending on your network and the plotting server you choose.
 <pre>
 download from U.S. based plotting server at the following countries(bandwidth 1 Gbit/s):
-US: ping Latency ~50ms, download speed > 1000Mbit/s.   
-UK: ping Latency ~80ms, download speed > 1000Mbit/s.    
-DE: ping Latency ~100ms, download speed > 1000Mbit/s.    
-FR: ping Latency ~100ms, download speed > 1000Mbit/s.    
-JP: ping Latency ~160ms, download speed > 900Mbit/s.   
-AU: ping Latency ~220ms, download speed > 800Mbit/s.   
-IN: ping Latency ~280ms, download speed > 700Mbit/s.    
+US: ping latency ~50ms, download speed > 1000Mbit/s.   
+UK: ping latency ~80ms, download speed > 1000Mbit/s.    
+DE: ping latency ~100ms, download speed > 1000Mbit/s.    
+FR: ping latency ~100ms, download speed > 1000Mbit/s.    
+JP: ping latency ~160ms, download speed > 900Mbit/s.   
+AU: ping latency ~220ms, download speed > 800Mbit/s.   
+IN: ping latency ~280ms, download speed > 700Mbit/s.    
 
 
 
