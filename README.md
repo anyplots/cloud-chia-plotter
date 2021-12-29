@@ -10,9 +10,11 @@ https://anyplots.com The marketplace to buy and sell chia plots
 <pre>
 -p  project token ( get it from your project page https://anyplots.com/buy-chia-plot/projects ), such as(40 chars):
     -p 000005e13f5fc456753081edf7dcc98986dcffa15 
+    
 -d  directories for save plots, separate multiple directories with semicolons, such as:
     -d  /mnt/d/;/mnt/e/;/mnt/f/
     -d  d:\;e:\;f:\
+    
 You can run multiple processes at the same time.
 </pre>
 
@@ -20,7 +22,9 @@ You can run multiple processes at the same time.
 <pre>
 # run the follow script in the linux console
 # Note that different platforms correspond to different link versions
+
 #rm ./CloudChiaPlotter
+
 wget -O CloudChiaPlotter https://github.com/anyplots/cloud-chia-plotter/releases/download/v1/cloud-chia-plotter-v1-linux-x64
 chmod +x ./CloudChiaPlotter
 ./CloudChiaPlotter -p {your project token} -d  /mnt/d/;/mnt/e/;/mnt/f/
@@ -33,6 +37,7 @@ chmod +x ./CloudChiaPlotter
 #run the follow command(If there is a problem with the execution sequence, please execute line by line)
 
 #del ./CloudChiaPlotter.exe
+
 Invoke-WebRequest -Uri  https://github.com/anyplots/cloud-chia-plotter/releases/download/v1/cloud-chia-plotter-v1-win-x64.exe -Outfile ./CloudChiaPlotter.exe
 ./CloudChiaPlotter.exe -p {your project token} -d  d:\;e:\;f:\
 </pre>
