@@ -42,13 +42,14 @@ Invoke-WebRequest -Uri  https://github.com/anyplots/cloud-chia-plotter/releases/
 Different user experiences may vary, depending on your network and the plotting server you choose.
 <pre>
 download from U.S. based plotting server at the following countries(bandwidth 1 Gbit/s):
-US > 1000Mbit/s
-DE > 1000Mbit/s
-UK > 1000Mbit/s
-FR > 1000Mbit/s
-JP > 900Mbit/s
-AU > 800Mbit/s
-IN > 700Mbit/s
+US: ping Latency ~50ms, download speed > 1000Mbit/s.   
+UK: ping Latency ~80ms, download speed > 1000Mbit/s.    
+DE: ping Latency ~100ms, download speed > 1000Mbit/s.    
+FR: ping Latency ~100ms, download speed > 1000Mbit/s.    
+JP: ping Latency ~160ms, download speed > 900Mbit/s.   
+AU: ping Latency ~220ms, download speed > 800Mbit/s.   
+IN: ping Latency ~280ms, download speed > 700Mbit/s.    
+
 
 
 
