@@ -44,7 +44,7 @@ chmod +x ./CloudChiaPlotter
 #Now, open a powershell window (Click Start, type PowerShell, and then click Windows PowerShell)
 #run the follow command(If there is a problem with the execution sequence, please execute line by line)
 
-#del ./CloudChiaPlotter.exe
+#del .\\CloudChiaPlotter.exe
 
 Invoke-WebRequest -Uri  https://github.com/anyplots/cloud-chia-plotter/releases/download/v1/cloud-chia-plotter-v1-win-x64.exe -Outfile ./CloudChiaPlotter.exe
 .\\CloudChiaPlotter.exe -p {your project token} -d  d:\\;e:\\;f:\\
