@@ -46,7 +46,7 @@ chmod +x ./CloudChiaPlotter
 
 #del .\\CloudChiaPlotter.exe
 
-Invoke-WebRequest -Uri  https://github.com/anyplots/cloud-chia-plotter/releases/download/v1/cloud-chia-plotter-v1-win-x64.exe -Outfile ./CloudChiaPlotter.exe
+Invoke-WebRequest -Uri  https://github.com/anyplots/cloud-chia-plotter/releases/download/v1/cloud-chia-plotter-v1-win-x64.exe -Outfile .\\CloudChiaPlotter.exe
 .\\CloudChiaPlotter.exe -p {your project token} -d  d:\\;e:\\;f:\\
 </pre>
 
