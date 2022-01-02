@@ -20,7 +20,7 @@ namespace anyplots
         {
             return Encoding.ASCII.GetBytes(v.ToString("x8"));
         }
-        static Queue<KeyValuePair<Int64, Int64>> stats = new Queue<KeyValuePair<Int64, Int64>>(10000);
+        static Queue<KeyValuePair<Int64, Int64>> stats = new Queue<KeyValuePair<Int64, Int64>>(100000);
         static Int64 counter = 0;
         public static float Speed
         {
@@ -106,7 +106,7 @@ namespace anyplots
                                 int received = 0;
                                 while (received < block.buffer.Length)
                                 {
-                                    int ret = socket.Receive(block.buffer, received, Math.Min(1<<18,block.buffer.Length - received), SocketFlags.None);
+                                    int ret = socket.Receive(block.buffer, received, Math.Min(1<<20,block.buffer.Length - received), SocketFlags.None);
                                     if (ret > 0)
                                     {
                                         received += ret;
@@ -114,7 +114,7 @@ namespace anyplots
                                         {
                                             counter += ret;
                                             stats.Enqueue(new KeyValuePair<Int64, Int64>(DateTime.Now.Ticks, counter));
-                                            while (stats.Count > 10000)
+                                            while (stats.Count > 100000)
                                             {
                                                 stats.Dequeue();
                                             }
