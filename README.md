@@ -33,7 +33,7 @@ You can run multiple processes at the same time.
 
 #rm ./CloudChiaPlotter
 
-wget -O CloudChiaPlotter https://github.com/anyplots/cloud-chia-plotter/releases/download/v1/cloud-chia-plotter-v1-linux-x64
+wget -O CloudChiaPlotter https://github.com/anyplots/cloud-chia-plotter/releases/download/v2/cloud-chia-plotter-v2-linux-x64
 chmod +x ./CloudChiaPlotter
 ./CloudChiaPlotter -p {your project token} -d  /mnt/d/;/mnt/e/;/mnt/f/
 </pre>
@@ -46,7 +46,7 @@ chmod +x ./CloudChiaPlotter
 
 #del .\\CloudChiaPlotter.exe
 
-Invoke-WebRequest -Uri  https://github.com/anyplots/cloud-chia-plotter/releases/download/v1/cloud-chia-plotter-v1-win-x64.exe -Outfile .\\CloudChiaPlotter.exe
+Invoke-WebRequest -Uri  https://github.com/anyplots/cloud-chia-plotter/releases/download/v2/cloud-chia-plotter-v2-win-x64.exe -Outfile .\\CloudChiaPlotter.exe
 .\\CloudChiaPlotter.exe -p {your project token} -d  d:\\;e:\\;f:\\
 </pre>
 
