@@ -162,7 +162,7 @@ namespace anyplots
         public void Write(Block block)
         {;
             if (Err != null) throw Err;
-            if (!running) throw new Exception("writing stopped!!!");
+            if (!running) { Err = new Exception("writing stopped!!!"); return; }
             lock (queue)
             {
                 queue.Enqueue(block);
