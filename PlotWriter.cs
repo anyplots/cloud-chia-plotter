@@ -62,7 +62,6 @@ namespace anyplots
             }
             catch (Exception ex)
             {
-                running = false;
                 Dispose();
                 try { File.Delete(dir + fileid + "." + filename + ".data" + ApiController.Ext); } catch { }
                 try { File.Delete(dir + fileid + "." + filename + ".conf" + ApiController.Ext); } catch { }
@@ -71,6 +70,7 @@ namespace anyplots
         }
         public void Dispose()
         {
+            Err = new Exception("Disposed");
             if (running)
             {
                 running = false;
@@ -161,7 +161,7 @@ namespace anyplots
         }
         public void Write(Block block)
         {;
-            if (Err != null) throw Err;
+            if (Err != null) { return; }
             if (!running) { Err = new Exception("writing stopped!!!"); return; }
             lock (queue)
             {
