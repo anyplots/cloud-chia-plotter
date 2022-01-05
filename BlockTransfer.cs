@@ -37,36 +37,12 @@ namespace anyplots
                     {
                         float taken = (DateTime.Now.Ticks - stats.Peek().Key) / 10000000.0f;
                         float speed = (float)((counter - stats.Peek().Value) * 8 / taken ) / 1024 / 1024;
-                        if(taken > 120)
-                        {
-                            if (speed < 20)
-                            {
-                                buffersize = 1 << 18;
-                            }
-                            else if (speed < 50)
-                            {
-                                buffersize = 1 << 19;
-                            }
-                            else if (speed < 100)
-                            {
-                                buffersize = 1 << 20;
-                            }
-                            else if (speed < 300)
-                            {
-                                buffersize = 1 << 21;
-                            }
-                            else 
-                            {
-                                buffersize = 1 << 22;
-                            }
-                        }
                         return speed;
                     }
                 }
                 return 0f;
             }
         }
-        static int buffersize = 1<<20;
         public static bool GetBlock(string url, Block block)
         {
             block.size = 0;
@@ -77,8 +53,8 @@ namespace anyplots
                 {
                     socket.NoDelay = true;
                     socket.ReceiveTimeout = 300000;
-                    socket.SendTimeout = 10000;
-                    socket.ReceiveBufferSize = buffersize;
+                    socket.SendTimeout = 1000;
+                    socket.ReceiveBufferSize = 4 * (1 << 20) + 1024;
                     string[] items = url.Split('/');
                     IPAddress ip = IPAddress.Parse(items[0].Split(':')[0]);
                     Int32 port = Int32.Parse(items[0].Split(':')[1]);
@@ -106,7 +82,7 @@ namespace anyplots
                                 int received = 0;
                                 while (received < block.buffer.Length)
                                 {
-                                    int ret = socket.Receive(block.buffer, received, Math.Min(1<<20,block.buffer.Length - received), SocketFlags.None);
+                                    int ret = socket.Receive(block.buffer, received, block.buffer.Length - received, SocketFlags.None);
                                     if (ret > 0)
                                     {
                                         received += ret;
