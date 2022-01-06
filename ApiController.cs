@@ -12,6 +12,7 @@ namespace anyplots
 {
     static class ApiController
     {
+        public static int ClientBandwidth = 0;
         public static string ProjectToken = "", ClientToken = "";
         public static string Ext { get { return ClientToken.Substring(0, 8); } }
         static ApiController()
@@ -77,7 +78,7 @@ namespace anyplots
         }
         public static string Login(string project_token, string client_token)
         {
-            string res = HttpRequest("https://anyplots.com/api/v1/client/login", new { project_token = project_token, client_token= client_token, version = Program.Version });
+            string res = HttpRequest("https://anyplots.com/api/v1/client/login", new { project_token = project_token, client_token= client_token, bandwidth = ClientBandwidth, version = Program.Version });
             LoginArg args = JsonConvert.DeserializeObject<LoginArg>(res) ?? new LoginArg();
             return args.client_token;
         }
@@ -103,12 +104,12 @@ namespace anyplots
             public int status = 0;
             public string result;
         }
-        public static int Stats(int id, float percent, float speed)
+        public static int Stats(int id, float percent, float speed, int pingmin, int pingavg, int pinglos)
         {
             int freespace, disks;
             freespace = Program.GetFreeSpace(out disks);
             string res = HttpRequest("https://anyplots.com/api/v1/client/stats",
-                new { token = ClientToken, id = id, percent = percent, speed = speed, freespace = freespace, disks = disks });
+                new { token = ClientToken, id = id, percent = percent, speed = speed, pingmin=pingmin, pingavg, pinglos = pinglos, freespace = freespace, disks = disks });
             StatsRes ret = JsonConvert.DeserializeObject<StatsRes>(res) ?? new StatsRes();
             return ret.action;
         }

@@ -141,7 +141,7 @@ namespace anyplots
                 }
             }
         }
-        static Int32 CRC(byte[] buffer, int length)
+        public static Int32 CRC(byte[] buffer, int length)
         {
             UInt32 value = 0xffffffff;
             int offset = 0;

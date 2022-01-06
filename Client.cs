@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Net;
+using System.Net.NetworkInformation;
 using System.IO;
 using System.Threading;
 using System.Diagnostics;
@@ -12,7 +13,6 @@ namespace anyplots
     {
         public static String downloadstatus = "";
         public static int optimizedmaxthreads = -1;
-        public static int limitedmaxthreads = 128;
         string url = "";
         int id = 0;
         PlotWriter writer = null;
@@ -44,7 +44,7 @@ namespace anyplots
                 }
                 finally
                 {
-                    if(block!=null) position += block.buffer.Length;
+                    if (block != null) position += block.buffer.Length;
                 }
             }
         }
@@ -105,154 +105,167 @@ namespace anyplots
                     }
                     else
                     {
-                        if (maxthreads > 4)
-                        {
-                            maxthreads-=2;
-                        }
                         Thread.Sleep(10000);
                     }
                 }
                 catch (Exception ex)
                 {
-                    if (maxthreads > 4)
-                    {
-                        maxthreads-=2;
-                    }
                     ApiController.Logging(true, id, "DownloadThread(" + tid + "):" + ex.Message + "\r\n" + ex.StackTrace);
                     Thread.Sleep(10000);
                 }
             }
         }
-       
-        public bool Run()
+        int pingavg = 100;
+        int pingmin = 2000;
+        int pinglos = 0;
+        void PingServer(object o)
         {
-            bool ret = true;
-            for (int i = 0; i < 128; i++)
-            {
-                threads.Add(new Thread(DownloadThread));
-                threads[i].Start(i);
-                Thread.Sleep(10);
-            }
-            try { Console.CursorVisible = false; } catch { }
-            try { if(Console.WindowWidth < 80) Console.WindowWidth = 80; } catch { }
-            DateTime nextstat = DateTime.MinValue;
-            float latest_speed = 0;
-            int latest_count = 0;
-            string name = url.Split('/')[1].Split('.')[1];
+            IPAddress ip = IPAddress.Parse((string)o);
+            Queue<int> items = new Queue<int>(500);
+            Stopwatch watch = new Stopwatch();
             while (running)
             {
-                bool isalive = false;
-                for (int i = 0; i < threads.Count; i++)
+                watch.Reset();
+                watch.Start();
+                using (Ping ping = new Ping())
                 {
-                    if (threads[i].IsAlive)
+                    try
                     {
-                        isalive = true;
-                        break;
-                    }
-                }
-                if (writer.Err != null)
-                {
-                    ret = false;
-                    running = false;
-                    writer.Dispose();
-                    ApiController.Logging(true, id, writer.Err.Message + "\r\n" + writer.Err.StackTrace);
-                    break;
-                }
-                if (isalive)
-                {
-                    double percent = Math.Max(writer.Percent - 0.0001f, 0); // 100% will cause plot delete on the server side.
-                    float speed = BlockTransfer.Speed;
-                    Console.Write(("\r[" + id + "] " + percent.ToString("f4") + "%, " + speed.ToString("f1") + "Mbps, " + maxthreads + " Threads").PadRight(45,' ') +
-                        (diskslow ? "write queue full, disk I/O speed is slow": (name.Substring(0, 30) + "...")));
-                    if (optimizedmaxthreads != -1)
-                    {
-                        maxthreads = optimizedmaxthreads;
-                    }
-                    else
-                    {
-                        if (latest_speed < speed - 1)
+                        Byte[] data = Encoding.ASCII.GetBytes((Guid.NewGuid().ToString() + Guid.NewGuid().ToString() + Guid.NewGuid().ToString()).Substring(0, 64));
+                        PingReply pr = ping.Send(ip, 1000, data);
+                        if (pr.Status == IPStatus.Success)
                         {
-                            latest_speed = speed;
-                            latest_count = 0; 
-                            if (speed < 20)
-                            {
-                                maxthreads = (int)speed;
-                            }
-                            else if (speed < 100)
-                            {
-                                maxthreads = 20 + (int)speed / 5;
-                            }
-                            else if (speed < 300)
-                            {
-                                maxthreads = 40 + (int)speed / 10;
-                            }
-                            else if (speed < 500)
-                            {
-                                maxthreads = 70 + (int)speed / 25;
-                            }
-                            else
-                            {
-                                maxthreads = 128;
-                            }
-                        }
-                        else if (latest_speed > speed + 1)
-                        {
-                            latest_count++;
-                            if (latest_count > 15)
-                            {
-                                latest_speed = speed;
-                                latest_count = 0;
-                                maxthreads = (int)Math.Min(maxthreads * 0.95, maxthreads - 1);
-                            }
-                        }
-                        if(maxthreads > limitedmaxthreads)
-                        {
-                            maxthreads = limitedmaxthreads;
-                        }
-                        if (maxthreads > 128)
-                        {
-                            maxthreads = 128;
-                        }
-                        if (maxthreads < 4)
-                        {
-                            maxthreads = 4;
-                        }
-                    }
-                    if (nextstat < DateTime.Now)
-                    {
-                        nextstat = DateTime.Now.AddSeconds(30);
-                        int status = ApiController.Stats(id, (float)percent, (float)speed);
-                        if (status == -9999) // error
-                        {
-                            running = false;
-                            ret = false;
-                            writer.Dispose();
-                            break;
-                        }
-                        else if (status > 0)
-                        {
-                            limitedmaxthreads = status;
+                            items.Enqueue((int)pr.RoundtripTime);
                         }
                         else
                         {
-                            optimizedmaxthreads = -status;
+                            items.Enqueue(1000);
                         }
                     }
+                    catch { items.Enqueue(1000); }
                 }
-                else
+                Queue<int> items_ = new Queue<int>(500);
+                while (items.Count > 300) items.Dequeue();
+                int total = 0,count = 0, min = 1000;
+                while (items.Count > 0)
                 {
-                    if (writer.IsCompleted)
+                    int t = items.Dequeue();
+                    total += t;
+                    min = Math.Min(min, t);
+                    if (t >= 1000) count++;
+                    items_.Enqueue(t);
+                }
+                items = items_;
+                pingmin = min;
+                pingavg = total / items_.Count;
+                pinglos = 100 * count / items_.Count;
+                if (optimizedmaxthreads == -1)
+                {
+                    float max_;
+                    max_ = ApiController.ClientBandwidth / 16f * Math.Min(8, Math.Max(1, (pingavg / 50f)));
+                    max_ -= max_ * pinglos * 2 / 100;
+                    if (max_ < 4)
                     {
-                        writer.Finish();
-                        ApiController.Stats(id, 100,  0);
+                        max_ = 4;
+                    }
+                    if (max_ > threads.Count)
+                    {
+                        max_ = threads.Count;
+                    }
+                    maxthreads = (int)max_;
+                }
+                watch.Stop();
+                if (watch.ElapsedMilliseconds < 995)
+                {
+                    Thread.Sleep(1000 - (int)watch.ElapsedMilliseconds);
+                }
+            }
+        }
+        public bool Run()
+        {
+            bool ret = true;
+            try
+            {
+                maxthreads = ApiController.ClientBandwidth / 10;
+                if (maxthreads > 128) maxthreads = 128;
+                Thread t = new Thread(PingServer);
+                t.Start(url.Split(':')[0]);
+                for (int i = 0; i < 128; i++)
+                {
+                    threads.Add(new Thread(DownloadThread));
+                    threads[i].Start(i);
+                    Thread.Sleep(10);
+                }
+                try { if (Console.WindowWidth < 80) Console.WindowWidth = 80; } catch { }
+                DateTime nextstat = DateTime.MinValue;
+                string name = url.Split('/')[1].Split('.')[1];
+                while (running)
+                {
+                    bool isalive = false;
+                    for (int i = 0; i < threads.Count; i++)
+                    {
+                        if (threads[i].IsAlive)
+                        {
+                            isalive = true;
+                            break;
+                        }
+                    }
+                    if (writer.Err != null)
+                    {
+                        ret = false;
+                        running = false;
+                        writer.Dispose();
+                        ApiController.Logging(true, id, writer.Err.Message + "\r\n" + writer.Err.StackTrace);
                         break;
                     }
+                    if (isalive)
+                    {
+                        double percent = Math.Max(writer.Percent - 0.0001f, 0); // 100% will cause plot delete on the server side.
+                        float speed = BlockTransfer.Speed;
+                        Console.Write(("\r[" + id + "] " + percent.ToString("f4") + "%, " + speed.ToString("f1") + "Mbps, " + maxthreads + " Threads").PadRight(45, ' ') +
+                            (diskslow ? "write queue full, disk I/O speed is slow" : (name.Substring(0, 30) + "...")));
+
+                        if (optimizedmaxthreads != -1)
+                        {
+                            maxthreads = optimizedmaxthreads;
+                        }
+                        if (nextstat < DateTime.Now)
+                        {
+                            nextstat = DateTime.Now.AddSeconds(30);
+                            int status = ApiController.Stats(id, (float)percent, (float)speed, pingmin, pingavg, pinglos);
+                            if (status == -9999) // error
+                            {
+                                running = false;
+                                ret = false;
+                                writer.Dispose();
+                                break;
+                            }
+                            else if (status < 0)
+                            {
+                                optimizedmaxthreads = -status;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (writer.IsCompleted)
+                        {
+                            writer.Finish();
+                            ApiController.Stats(id, 100, 0, pingmin, pingavg, pinglos);
+                            break;
+                        }
+                    }
+                    Thread.Sleep(1000);
                 }
-                Thread.Sleep(1000);
+                for (int i = 0; i < threads.Count; i++)
+                {
+                    threads[i].Join();
+                }
             }
-            for (int i = 0; i < threads.Count; i++)
+            finally
             {
-                threads[i].Join();
+                running = false;
+                try { writer.Dispose(); } catch { }
             }
             return ret;
         }
