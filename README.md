@@ -2,7 +2,7 @@ cloud chia plotter: fast chia plotting without SSD disk or large amount of memor
 
 It does not require SSD disk or large amount of memory, and can run well on low configuration rig, such as raspberry pi.
 
-https://anyplots.com The marketplace to buy and sell chia plots, starts at $0.20/plot.
+[https://anyplots.com/](https://anyplots.com) The marketplace to buy and sell chia plots, starts at $0.20/plot.
 
 <h2>Cloud Chia Plotter Usage</h2>
 
