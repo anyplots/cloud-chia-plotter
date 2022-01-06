@@ -17,7 +17,7 @@ It does not require SSD disk or large amount of memory, and can run well on low 
         -d  d:\;e:\;f:\
 <br/>    
 -b  set your real network bandwidth/speed(Mbps), such as for 1000Mbps:
-        -d  1000
+        -b 1000
     please test your network speed at https://speedtest.net
 <br/>               
 for example:
