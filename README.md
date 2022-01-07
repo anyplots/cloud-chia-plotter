@@ -16,15 +16,15 @@ It does not require SSD disk or large amount of memory, and can run well on low 
         -d  /mnt/d/;/mnt/e/;/mnt/f/
         -d  d:\;e:\;f:\
 <br/>    
--b  set your real network bandwidth/speed(Mbps), such as for 1000Mbps:
-        -b 1000
+-b  set your real network bandwidth/speed(Mbps), such as:
+    for 500Mbps:    -b 500            , for 1000Mbps:    -b 1000  
     please test your network speed at https://speedtest.net
 <br/>               
 for example:
 
-.\\CloudChiaPlotter.exe -p 000005e13f5fc456753081edf7dcc98986dcffa15 -d  d:\\;e:\\;f:\\ -b 1000
+.\\CloudChiaPlotter.exe -p 000005e13f5fc456753081edf7dcc98986dcffa15 -d  d:\\;e:\\;f:\\ -b 500
 
-./CloudChiaPlotter -p 000005e13f5fc456753081edf7dcc98986dcffa15 -d  /mnt/d/;/mnt/e/;/mnt/f/ -b 1000
+./CloudChiaPlotter -p 000005e13f5fc456753081edf7dcc98986dcffa15 -d  /mnt/d/;/mnt/e/;/mnt/f/ -b 500
 
 You can run multiple processes at the same time.
 
