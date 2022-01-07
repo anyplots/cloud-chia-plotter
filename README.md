@@ -36,17 +36,6 @@ You can run multiple processes at the same time.
 <h4>3.      Under the condition that the program does not change the directory configuration, for uncompleted plot, It will continue to transmit the remaining part only.</h4>
 
 
-<h3>for Linux series.</h3>
-<pre>
-# run the follow script in the linux console
-# Note that different platforms correspond to different link versions
-
-#rm ./CloudChiaPlotter
-
-wget -O CloudChiaPlotter https://github.com/anyplots/cloud-chia-plotter/releases/download/v3/cloud-chia-plotter-v3-linux-x64
-chmod +x ./CloudChiaPlotter
-./CloudChiaPlotter -p {your project token} -d  /mnt/d/;/mnt/e/;/mnt/f/ -b {your bandwidth}
-</pre>
 
 <h3>for Windows.</h3>
 <pre>
@@ -60,6 +49,57 @@ Invoke-WebRequest -Uri  https://github.com/anyplots/cloud-chia-plotter/releases/
 .\\CloudChiaPlotter.exe -p {your project token} -d  d:\\;e:\\;f:\\ -b {your bandwidth}
 </pre>
 
+
+<h3>for Linux series.</h3>
+<pre>
+# run the follow script in the linux console
+# Note that different platforms correspond to different link versions
+
+#rm ./CloudChiaPlotter
+
+wget -O CloudChiaPlotter https://github.com/anyplots/cloud-chia-plotter/releases/download/v3/cloud-chia-plotter-v3-linux-x64
+chmod +x ./CloudChiaPlotter
+./CloudChiaPlotter -p {your project token} -d  /mnt/d/;/mnt/e/;/mnt/f/ -b {your bandwidth}
+</pre>
+
+
+<h3>for Mac OS series.</h3>
+<pre>
+#Running the CloudChiaPlotter on Mac OS
+#Now, open a terminal window (Mac OS version of the command line)
+#run the follow command:
+
+#rm ./CloudChiaPlotter
+curl -O CloudChiaPlotter https://github.com/anyplots/cloud-chia-plotter/releases/download/v3/cloud-chia-plotter-v3-osx-x64
+chmod +x ./CloudChiaPlotter
+./CloudChiaPlotter -p {your project token} -d  /mnt/d/;/mnt/e/;/mnt/f/ -b {your bandwidth}
+</pre>
+
+
+<h3>for Arm64 Linux series(Raspberry Pi 3, Pi 4, etc)</h3>
+<pre>
+# run the follow script in the linux console
+# Note that different platforms correspond to different link versions
+
+#rm ./CloudChiaPlotter
+
+wget -O CloudChiaPlotter https://github.com/anyplots/cloud-chia-plotter/releases/download/v3/cloud-chia-plotter-v3-arm64
+chmod +x ./CloudChiaPlotter
+./CloudChiaPlotter -p {your project token} -d  /mnt/d/;/mnt/e/;/mnt/f/ -b {your bandwidth}
+</pre>
+
+
+<h3>for Arm32 Linux  series.</h3>
+<pre>
+# run the follow script in the linux console
+# Note that different platforms correspond to different link versions
+
+#rm ./CloudChiaPlotter
+
+wget -O CloudChiaPlotter https://github.com/anyplots/cloud-chia-plotter/releases/download/v3/cloud-chia-plotter-v3-linux-arm32
+chmod +x ./CloudChiaPlotter
+./CloudChiaPlotter -p {your project token} -d  /mnt/d/;/mnt/e/;/mnt/f/ -b {your bandwidth}
+</pre>
 
 <h3>Tested download Speed</h3>
 Different user experiences may vary, depending on your network and the plotting server you choose.
