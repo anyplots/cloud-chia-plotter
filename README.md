@@ -18,7 +18,7 @@ It does not require SSD disk or large amount of memory, and can run well on low 
 <br/>    
 -b  set your real network bandwidth/speed(Mbps), such as:
     for 500Mbps:    -b 500            , for 1000Mbps:    -b 1000  
-    please test your network speed at https://speedtest.net
+    please test your network speed at <a href="https://speedtest.net">https://speedtest.net</a>
 <br/>               
 for example:
 
@@ -31,11 +31,13 @@ You can run multiple processes at the same time.
 </pre>
 
 <h3>Tips</h3>
-<h4>1.      Do not set parameters that are inconsistent with your actual bandwidth. If you set -b 1000 for the actual bandwidth of 500mbps, it will reduce your download speed in most cases, because the probability of network packet loss will increase.</h4>
-<h4>2.      For bandwidth greater than 500mbps, two processes can be run at the same time, but the bandwidth parameter should be divided by 2.</h4>
-<h4>3.      Under the condition that the program does not change the directory configuration, for uncompleted plot, It will continue to transmit the remaining part only.</h4>
+<h4>Do not set bandwidth parameter that are inconsistent with your actual bandwidth.
+ <br/>If you set -b 1000 for the actual bandwidth of 500mbps, it will reduce your download speed in most cases, because the probability of network packet loss will increase.</h4>
+<h4>For bandwidth greater than 500mbps, two processes can be run at the same time, but the bandwidth parameter should be divided by 2.</h4>
+<h4>Under the condition that the program does not change the directory configuration, for uncompleted plot, It will continue to transmit the remaining part only.</h4>
 
-
+<br/>
+<br/>
 
 <h3>for Windows.</h3>
 <pre>
