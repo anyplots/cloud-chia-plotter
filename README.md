@@ -18,7 +18,7 @@ It does not require SSD disk or large amount of memory, and can run well on low 
 <br/>    
 -b  set your real network bandwidth/speed(Mbps), such as:
     for 500Mbps:    -b 500            , for 1000Mbps:    -b 1000  
-    please test your network speed at <a href="https://speedtest.net">https://speedtest.net</a>
+    please test your network speed at <a href="https://speedtest.net" target="_blank">https://speedtest.net</a>
 <br/>               
 for example:
 
