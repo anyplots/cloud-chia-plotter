@@ -83,7 +83,7 @@ chmod +x ./CloudChiaPlotter
 
 #rm ./CloudChiaPlotter
 
-wget -O CloudChiaPlotter https://github.com/anyplots/cloud-chia-plotter/releases/download/v3/cloud-chia-plotter-v3-arm64
+wget -O CloudChiaPlotter https://github.com/anyplots/cloud-chia-plotter/releases/download/v3/cloud-chia-plotter-v3-linux-arm64
 chmod +x ./CloudChiaPlotter
 ./CloudChiaPlotter -p {your project token} -d  /mnt/d/;/mnt/e/;/mnt/f/ -b {your bandwidth}
 </pre>
