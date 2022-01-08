@@ -45,7 +45,6 @@ namespace anyplots
             IAsyncResult ar = req.BeginGetResponse(null, null);
             if (ar.AsyncWaitHandle.WaitOne(timeout))
             {
-                try { if (ar.IsCompleted) ar.AsyncWaitHandle.Close(); } catch {}
                 using (HttpWebResponse res = (HttpWebResponse)req.EndGetResponse(ar))
                 {
                     using (StreamReader stream = new StreamReader(res.GetResponseStream(), Encoding.UTF8))
@@ -56,7 +55,6 @@ namespace anyplots
             }
             else
             {
-                try { if (ar.IsCompleted) ar.AsyncWaitHandle.Close(); } catch { }
                 throw new Exception("request timeout:" + timeout);
             }
         }

@@ -61,7 +61,6 @@ namespace anyplots
                     IAsyncResult ar = socket.BeginConnect(ip, port, null, null);
                     if (ar.AsyncWaitHandle.WaitOne(10000))
                     {
-                        try { if (ar.IsCompleted) ar.AsyncWaitHandle.Close(); } catch {}
                         socket.EndConnect(ar);
                         if (socket.Connected)
                         {
@@ -121,10 +120,6 @@ namespace anyplots
                             block.size = block.buffer.Length;
                             return true;
                         }
-                    }
-                    else
-                    {
-                        try { if (ar.IsCompleted) ar.AsyncWaitHandle.Close(); } catch { }
                     }
                 }
                 catch (SocketException ex)

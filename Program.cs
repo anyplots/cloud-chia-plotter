@@ -26,7 +26,7 @@ namespace anyplots
                                 byte[] bytes = new byte[fs.Length];
                                 fs.Read(bytes, 0, bytes.Length);
                                 int crc = BlockTransfer.CRC(bytes, bytes.Length) ;
-                                ver = "2022010801@" + crc.ToString("x8");
+                                ver = "2022010901@" + crc.ToString("x8");
                             }
                         }
                     }
@@ -418,8 +418,8 @@ namespace anyplots
                             {
                                 if(writer == null)
                                 {
-                                    ApiController.Logging(true, fileid, "Download Failed: " + filename + ", it will auto try again in 30 seconds.");
-                                    Thread.Sleep(30000);
+                                    ApiController.Logging(true, fileid, "Download Failed: " + filename + ", it will auto try again in 300 seconds.");
+                                    Thread.Sleep(300000);
                                     continue;
                                 }
                                 Client mc = new Client(url, fileid, writer);
