@@ -40,7 +40,8 @@ You can run multiple processes at the same time.
 <br/>
 
 <h3>for Windows.</h3>
-For beginners, we provide a simple GUI program. go <a href="windows-gui.md">Windows-GUI</a>
+For beginners, we provide a simple GUI program. go <a href="windows-gui.md">Windows-GUI</a><br/>
+<img src="gui.png" /><br/><br/>
 If you are familiar with PowerShell, you can use the following scripts.
 <pre>
 #Run it on Windows
