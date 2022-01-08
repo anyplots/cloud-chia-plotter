@@ -9,6 +9,6 @@ When it starting, it will auto download the CloudChiaPlotter.exe
 After download the CloudChiaPlotter.exe, it will show a setup window, setup it with your own parameters.
 <img src="step3.png" />
 <br/><br/>
-Now, It's running,  It will auto download all plot related to your project, just keep it running.
+Now, It's running,  It will auto download all plots related to your project, just keep it running.
 <img src="step4.png" />
 <br/><br/>
