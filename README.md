@@ -41,6 +41,7 @@ You can run multiple processes at the same time.
 
 <h3>for Windows.</h3>
 For beginners, we provide a simple GUI program. go <a href="windows-gui.md">Windows-GUI</a>
+If you are familiar with PowerShell, you can use the following scripts.
 <pre>
 #Run it on Windows
 #Now, open a powershell window (Click Start, type PowerShell, and then click Windows PowerShell)
@@ -48,6 +49,7 @@ For beginners, we provide a simple GUI program. go <a href="windows-gui.md">Wind
 
 #del .\\CloudChiaPlotter.exe
 
+[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 Invoke-WebRequest -Uri  https://github.com/anyplots/cloud-chia-plotter/releases/download/v3/cloud-chia-plotter-v3-win-x64.exe -Outfile .\\CloudChiaPlotter.exe
 .\\CloudChiaPlotter.exe -p {your project token} -d  d:\\;e:\\;f:\\ -b {your bandwidth}
 </pre>
