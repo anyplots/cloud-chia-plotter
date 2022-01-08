@@ -59,59 +59,81 @@ namespace anyplots
                     IPAddress ip = IPAddress.Parse(items[0].Split(':')[0]);
                     Int32 port = Int32.Parse(items[0].Split(':')[1]);
                     IAsyncResult ar = socket.BeginConnect(ip, port, null, null);
-                    using (var w = ar.AsyncWaitHandle)
+                    if (ar.AsyncWaitHandle.WaitOne(10000))
                     {
-                        if (w.WaitOne(10000))
+                        try { if (ar.IsCompleted) ar.AsyncWaitHandle.Close(); } catch {}
+                        socket.EndConnect(ar);
+                        if (socket.Connected)
                         {
-                            socket.EndConnect(ar);
-                            if (socket.Connected)
+                            string request = "GET\n" + items[1] + "\n" + block.position.ToString() + "\n" + (block.position + block.buffer.Length - 1).ToString() + "\n";
+                            Byte[] data_ = Encoding.ASCII.GetBytes(request.PadRight(248, ' '));
+                            if (socket.Send(data_) != 248)
                             {
-                                string request = "GET\n" + items[1] + "\n" + block.position.ToString() + "\n" + (block.position + block.buffer.Length - 1).ToString() + "\n";
-                                Byte[] data_ = Encoding.ASCII.GetBytes(request.PadRight(248, ' '));
-                                if (socket.Send(data_) != 248)
-                                {
-                                    ApiController.Logging(false,0,"send request error!");
-                                    return false;
-                                }
-                                if (socket.Send(Int32Bytes(CRC(data_, data_.Length))) != 8)
-                                {
-                                    ApiController.Logging(false,0,"send crc error!");
-                                    return false;
+                                ApiController.Logging(false, 0, "send request error!");
+                                return false;
+                            }
+                            if (socket.Send(Int32Bytes(CRC(data_, data_.Length))) != 8)
+                            {
+                                ApiController.Logging(false, 0, "send crc error!");
+                                return false;
 
-                                }
-                                int received = 0;
-                                while (received < block.buffer.Length)
+                            }
+                            int received = 0;
+                            while (received < block.buffer.Length)
+                            {
+                                int ret = socket.Receive(block.buffer, received, block.buffer.Length - received, SocketFlags.None);
+                                if (ret > 0)
                                 {
-                                    int ret = socket.Receive(block.buffer, received, block.buffer.Length - received, SocketFlags.None);
-                                    if (ret > 0)
+                                    received += ret;
+                                    lock (stats)
                                     {
-                                        received += ret;
-                                        lock (stats)
+                                        counter += ret;
+                                        stats.Enqueue(new KeyValuePair<Int64, Int64>(DateTime.Now.Ticks, counter));
+                                        while (stats.Count > 100000)
                                         {
-                                            counter += ret;
-                                            stats.Enqueue(new KeyValuePair<Int64, Int64>(DateTime.Now.Ticks, counter));
-                                            while (stats.Count > 100000)
-                                            {
-                                                stats.Dequeue();
-                                            }
+                                            stats.Dequeue();
                                         }
                                     }
-                                    else
+                                    if(received == 8 &&
+                                        block.buffer[0] == (byte)'7' &&
+                                        block.buffer[1] == (byte)'f' &&
+                                        block.buffer[2] == (byte)'f' &&
+                                        block.buffer[3] == (byte)'f' &&
+                                        block.buffer[4] == (byte)'f' &&
+                                        block.buffer[5] == (byte)'f' &&
+                                        block.buffer[6] == (byte)'f' &&
+                                        block.buffer[7] == (byte)'f')
                                     {
                                         return false;
                                     }
                                 }
-                                Byte[] crc = new byte[8];
-                                if (socket.Receive(crc) != 8 || CRC(block.buffer, received) != ReadInt32(crc, 0))
+                                else
                                 {
-                                    ApiController.Logging(false,0,"crc error!");
                                     return false;
                                 }
-                                block.size = block.buffer.Length;
-                                return true;
                             }
+                            Byte[] crc = new byte[8];
+                            if (socket.Receive(crc) != 8 || CRC(block.buffer, received) != ReadInt32(crc, 0))
+                            {
+                                ApiController.Logging(false, 0, "crc error!");
+                                return false;
+                            }
+                            block.size = block.buffer.Length;
+                            return true;
                         }
                     }
+                    else
+                    {
+                        try { if (ar.IsCompleted) ar.AsyncWaitHandle.Close(); } catch { }
+                    }
+                }
+                catch (SocketException ex)
+                {
+                    if(ex.SocketErrorCode == SocketError.ConnectionReset || ex.SocketErrorCode == SocketError.TimedOut)
+                    {
+                        return false;
+                    }
+                    ApiController.Logging(false, 0, ex.SocketErrorCode + "\r\n" + ex.Message + "\r\n" + ex.StackTrace);
                 }
                 catch (Exception ex)
                 {

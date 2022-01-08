@@ -105,7 +105,7 @@ namespace anyplots
                     }
                     else
                     {
-                        Thread.Sleep(10000);
+                        Thread.Sleep(5000);
                     }
                 }
                 catch (Exception ex)
@@ -162,7 +162,14 @@ namespace anyplots
                 if (optimizedmaxthreads == -1)
                 {
                     float max_;
-                    max_ = ApiController.ClientBandwidth / 16f * Math.Min(8, Math.Max(1, (pingavg / 50f)));
+                    if (items_.Count > 200 && pinglos > 0)
+                    {
+                        max_ = Math.Min(BlockTransfer.Speed * 5, ApiController.ClientBandwidth) / 16f * Math.Min(8, Math.Max(1, (pingavg / 50f)));
+                    }
+                    else
+                    {
+                        max_ = ApiController.ClientBandwidth / 16f * Math.Min(8, Math.Max(1, (pingavg / 50f)));
+                    }
                     max_ -= max_ * pinglos * 2 / 100;
                     if (max_ < 4)
                     {
@@ -186,8 +193,9 @@ namespace anyplots
             bool ret = true;
             try
             {
-                maxthreads = ApiController.ClientBandwidth / 10;
+                maxthreads = ApiController.ClientBandwidth / 16;
                 if (maxthreads > 128) maxthreads = 128;
+                if (maxthreads < 4) maxthreads = 4;
                 Thread t = new Thread(PingServer);
                 t.Start(url.Split(':')[0]);
                 for (int i = 0; i < 128; i++)

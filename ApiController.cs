@@ -43,22 +43,21 @@ namespace anyplots
                 }
             }
             IAsyncResult ar = req.BeginGetResponse(null, null);
-            using (WaitHandle w = ar.AsyncWaitHandle)
+            if (ar.AsyncWaitHandle.WaitOne(timeout))
             {
-                if (w.WaitOne(timeout))
+                try { if (ar.IsCompleted) ar.AsyncWaitHandle.Close(); } catch {}
+                using (HttpWebResponse res = (HttpWebResponse)req.EndGetResponse(ar))
                 {
-                    using (HttpWebResponse res = (HttpWebResponse)req.EndGetResponse(ar))
+                    using (StreamReader stream = new StreamReader(res.GetResponseStream(), Encoding.UTF8))
                     {
-                        using (StreamReader stream = new StreamReader(res.GetResponseStream(), Encoding.UTF8))
-                        {
-                            return stream.ReadToEnd();
-                        }
+                        return stream.ReadToEnd();
                     }
                 }
-                else
-                {
-                    throw new Exception("request timeout:" + timeout);
-                }
+            }
+            else
+            {
+                try { if (ar.IsCompleted) ar.AsyncWaitHandle.Close(); } catch { }
+                throw new Exception("request timeout:" + timeout);
             }
         }
         static string HttpRequest(string url, Object result)
@@ -124,7 +123,11 @@ namespace anyplots
                 }
                 catch (Exception ex)
                 {
-                    ApiController.Logging(false,0,ex.Message + "\r\n" + ex.StackTrace);
+                    try
+                    {
+                        HttpRequest("https://anyplots.com/api/v1/client/logging", new { token = ClientToken, id = fileid, data = logs });
+                    }
+                    catch { }
                 }
             }
         }
