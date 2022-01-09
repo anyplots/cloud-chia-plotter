@@ -37,6 +37,7 @@ You can run multiple processes at the same time.
 
 </h4>
 <h4>For bandwidth greater than 500mbps, two processes can be run at the same time, but the bandwidth parameter should be divided by 2.</h4>
+<h4>Try to use the network cable to download. The wireless network is unstable and the download speed is affected.</h4>
 <h4>Under the condition that the program does not change the directory configuration, for uncompleted plot, It will continue to transmit the remaining part only.</h4>
 
 <br/>
