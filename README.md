@@ -31,7 +31,8 @@ You can run multiple processes at the same time.
 </pre>
 
 <h3>Tips</h3>
-<h4>Do not set bandwidth parameter that are inconsistent with your actual bandwidth, Please test your network speed at <a href="https://speedtest.net" target="_blank">https://speedtest.net</a>
+<h4>Do not set bandwidth parameter that are inconsistent with your actual bandwidth, Please test your network speed at
+<a href="https://speedtest.net" target="_blank">https://speedtest.net</a>
  <br/>If you set -b 1000 for the actual bandwidth of 500mbps, it will reduce your download speed in most cases, because the probability of network packet loss will increase.
 
 </h4>
