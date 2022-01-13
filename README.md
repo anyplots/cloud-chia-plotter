@@ -22,9 +22,9 @@ It does not require SSD disk or large amount of memory, and can run well on low 
 <br/>               
 for example:
 
-.\\CloudChiaPlotter.exe -p 000005e13f5fc456753081edf7dcc98986dcffa15 -d  d:\\;e:\\;f:\\ -b 500
+.\\CloudChiaPlotter.exe -p 000005e13f5fc456753081edf7dcc98986dcffa15 -d  "d:\\;e:\\;f:\\" -b 500
 
-./CloudChiaPlotter -p 000005e13f5fc456753081edf7dcc98986dcffa15 -d  /mnt/d/;/mnt/e/;/mnt/f/ -b 500
+./CloudChiaPlotter -p 000005e13f5fc456753081edf7dcc98986dcffa15 -d  "/mnt/d/;/mnt/e/;/mnt/f/" -b 500
 
 You can run multiple processes at the same time.
 
@@ -56,7 +56,7 @@ If you are familiar with PowerShell, you can use the following scripts.
 
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 Invoke-WebRequest -Uri  https://github.com/anyplots/cloud-chia-plotter/releases/download/v3/cloud-chia-plotter-v3-win-x64.exe -Outfile .\\CloudChiaPlotter.exe
-.\\CloudChiaPlotter.exe -p {your project token} -d  d:\\;e:\\;f:\\ -b {your bandwidth}
+.\\CloudChiaPlotter.exe -p {your project token} -d  "d:\\;e:\\;f:\\" -b {your bandwidth}
 </pre>
 
 
@@ -69,7 +69,7 @@ Invoke-WebRequest -Uri  https://github.com/anyplots/cloud-chia-plotter/releases/
 
 wget -O CloudChiaPlotter https://github.com/anyplots/cloud-chia-plotter/releases/download/v3/cloud-chia-plotter-v3-linux-x64
 chmod +x ./CloudChiaPlotter
-./CloudChiaPlotter -p {your project token} -d  /mnt/d/;/mnt/e/;/mnt/f/ -b {your bandwidth}
+./CloudChiaPlotter -p {your project token} -d  "/mnt/d/;/mnt/e/;/mnt/f/" -b {your bandwidth}
 </pre>
 
 
@@ -82,7 +82,7 @@ chmod +x ./CloudChiaPlotter
 #rm ./CloudChiaPlotter
 curl -O CloudChiaPlotter https://github.com/anyplots/cloud-chia-plotter/releases/download/v3/cloud-chia-plotter-v3-osx-x64
 chmod +x ./CloudChiaPlotter
-./CloudChiaPlotter -p {your project token} -d  /mnt/d/;/mnt/e/;/mnt/f/ -b {your bandwidth}
+./CloudChiaPlotter -p {your project token} -d  "/mnt/d/;/mnt/e/;/mnt/f/" -b {your bandwidth}
 </pre>
 
 
@@ -95,7 +95,7 @@ chmod +x ./CloudChiaPlotter
 
 wget -O CloudChiaPlotter https://github.com/anyplots/cloud-chia-plotter/releases/download/v3/cloud-chia-plotter-v3-linux-arm64
 chmod +x ./CloudChiaPlotter
-./CloudChiaPlotter -p {your project token} -d  /mnt/d/;/mnt/e/;/mnt/f/ -b {your bandwidth}
+./CloudChiaPlotter -p {your project token} -d  "/mnt/d/;/mnt/e/;/mnt/f/" -b {your bandwidth}
 </pre>
 
 
@@ -108,7 +108,7 @@ chmod +x ./CloudChiaPlotter
 
 wget -O CloudChiaPlotter https://github.com/anyplots/cloud-chia-plotter/releases/download/v3/cloud-chia-plotter-v3-linux-arm32
 chmod +x ./CloudChiaPlotter
-./CloudChiaPlotter -p {your project token} -d  /mnt/d/;/mnt/e/;/mnt/f/ -b {your bandwidth}
+./CloudChiaPlotter -p {your project token} -d  "/mnt/d/;/mnt/e/;/mnt/f/" -b {your bandwidth}
 </pre>
 
 <h3>Tested download Speed</h3>
