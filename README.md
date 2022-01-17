@@ -4,6 +4,7 @@ It does not require SSD disk or large amount of memory, and can run well on low 
 
 [https://anyplots.com/](https://anyplots.com) The marketplace to buy and sell chia plots, starts at $0.20/plot.
 
+<img src="create.png" />
 <h2>Cloud Chia Plotter Usage</h2>
 
 <h3>Arguments:</h3>
