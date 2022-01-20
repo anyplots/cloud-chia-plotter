@@ -81,7 +81,7 @@ chmod +x ./CloudChiaPlotter
 #run the follow command:
 
 #rm ./CloudChiaPlotter
-curl -O CloudChiaPlotter https://github.com/anyplots/cloud-chia-plotter/releases/download/v3/cloud-chia-plotter-v3-osx-x64
+curl -O https://github.com/anyplots/cloud-chia-plotter/releases/download/v3/cloud-chia-plotter-v3-osx-x64 -o  CloudChiaPlotter
 chmod +x ./CloudChiaPlotter
 ./CloudChiaPlotter -p {your project token} -d  "/mnt/d/;/mnt/e/;/mnt/f/" -b {your bandwidth}
 </pre>
