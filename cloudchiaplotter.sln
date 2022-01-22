@@ -5,8 +5,6 @@ VisualStudioVersion = 17.0.31912.275
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CloudChiaPlotter", "CloudChiaPlotter.csproj", "{9B17F841-6FA6-4254-B558-6B436D3D2599}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CloudChiaPlotterServer", "..\cloudchiaplotterserver\CloudChiaPlotterServer.csproj", "{4F039A6B-61DB-4D2B-903A-011BA7FB3223}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
