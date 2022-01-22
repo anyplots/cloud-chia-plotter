@@ -146,3 +146,13 @@ win-x64.pubxml<br/><br/>
 You also can compile it for other OS by yourself.<br/>
 <b>It is not recommended to change the business logic in the code, otherwise you may not be able to download or occurs unknown errors.</b>
 
+
+<h2>Build it for linux without VS2022</h2>
+<pre>
+git clone https://github.com/anyplots/cloud-chia-plotter
+wget -O ./dotnet-install.sh https://dotnet.microsoft.com/download/dotnet/scripts/v1/dotnet-install.sh
+chmod +x ./dotnet-install.sh
+./dotnet-install.sh
+./.dotnet/dotnet  publish ./cloud-chia-plotter/CloudChiaPlotter.csproj /p:PublishProfile=./cloud-chia-plotter/Properties/PublishProfiles/linux-x64.pubxml
+</pre>
+
