@@ -1,4 +1,4 @@
-﻿/* copyright @ anyplots.com, All right rights, visit https://anyplots.com/ for more information */
+﻿/* copyright @ anyplots.com, All rights reserved, visit https://anyplots.com/ for more information */
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -121,33 +121,28 @@ namespace anyplots
         }
         void SaveProgress(bool changed)
         {
-            lock (this)
+            while (downloaded.Count > 1)
             {
-                while (downloaded.Count > 1)
+                if (downloaded.Keys[0] + Block.BlockSize == downloaded.Keys[1])
                 {
-                    if (downloaded.Keys[0] + Block.BlockSize == downloaded.Keys[1])
-                    {
-                        downloaded.RemoveAt(0);
-                        changed = true;
-                    }
-                    else
-                    {
-                        break;
-                    }
+                    downloaded.RemoveAt(0);
+                    changed = true;
                 }
-                if (changed && downloaded.Count > 0)
+                else
                 {
-                    conf.Position = 0;
-                    conf.Write(BitConverter.GetBytes(downloaded.Keys[0]), 0, 8);
-                    conf.Write(BitConverter.GetBytes(downloaded.Keys[0].GetHashCode()), 0, 4);
-                    conf.Flush();
+                    break;
                 }
             }
+            if (changed && downloaded.Count > 0)
+            {
+                conf.Position = 0;
+                conf.Write(BitConverter.GetBytes(downloaded.Keys[0]), 0, 8);
+                conf.Write(BitConverter.GetBytes(downloaded.Keys[0].GetHashCode()), 0, 4);
+                conf.Flush();
+            }
         }
-        public double Percent { get { lock (this) { return (downloaded.Keys[0] + (downloaded.Count - 1) * Block.BlockSize) * 100d / FileSize; } } }
-        public bool IsCompleted { get { lock (this) {
-                    ApiController.Logging(false,0,(downloaded.Keys[0] + Block.BlockSize) + ", " + FileSize);
-                    return downloaded.Keys[0] + Block.BlockSize >= FileSize; } } }
+        public double Percent = 0;
+        public bool IsCompleted = false;
 
         public bool IsQueueFull
         {
@@ -186,6 +181,7 @@ namespace anyplots
                         throw new Exception("writing stopped!!!");
                     }
                 }
+                Thread.Sleep(10);
             }
             if (!isempty)
             {
@@ -193,7 +189,14 @@ namespace anyplots
             }
             Dispose();
             File.Move(dir + fileid + "." + filename + ".data" + ApiController.Ext, dir + filename);
-            File.Delete(dir + fileid + "." + filename + ".conf" + ApiController.Ext);
+            if (File.Exists(dir + filename))
+            {
+                File.Delete(dir + fileid + "." + filename + ".conf" + ApiController.Ext);
+            }
+            else
+            {
+                throw new Exception("rename file failed!!!");
+            }
         }
         void Writing(object o)
         {
@@ -245,6 +248,8 @@ namespace anyplots
                         writed = 0;
                         nextflush = DateTime.Now.AddSeconds(5);
                     }
+                    Percent = (downloaded.Keys[0] + (downloaded.Count - 1) * Block.BlockSize) * 100d / FileSize;
+                    IsCompleted = downloaded.Keys[0] + Block.BlockSize >= FileSize;
                     GC.Collect();
                 }
             }

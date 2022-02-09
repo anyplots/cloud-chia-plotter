@@ -1,4 +1,4 @@
-﻿/* copyright @ anyplots.com, All right rights, visit https://anyplots.com/ for more information */
+﻿/* copyright @ anyplots.com, All rights reserved, visit https://anyplots.com/ for more information */
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -7,6 +7,8 @@ using System.IO;
 using System.Threading;
 using System.Diagnostics;
 using Newtonsoft.Json;
+
+   
 using System.Net.Sockets;
 namespace anyplots
 {

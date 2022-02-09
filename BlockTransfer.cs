@@ -1,4 +1,4 @@
-﻿/* copyright @ anyplots.com, All right rights, visit https://anyplots.com/ for more information */
+﻿/* copyright @ anyplots.com, All rights reserved, visit https://anyplots.com/ for more information */
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -54,7 +54,7 @@ namespace anyplots
                     socket.NoDelay = true;
                     socket.ReceiveTimeout = 300000;
                     socket.SendTimeout = 1000;
-                    socket.ReceiveBufferSize = 4 * (1 << 20) + 1024;
+                    socket.ReceiveBufferSize = 6 * (1 << 20) + 1024;
                     string[] items = url.Split('/');
                     IPAddress ip = IPAddress.Parse(items[0].Split(':')[0]);
                     Int32 port = Int32.Parse(items[0].Split(':')[1]);

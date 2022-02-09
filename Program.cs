@@ -1,4 +1,4 @@
-﻿/* copyright @ anyplots.com, All right rights, visit https://anyplots.com/ for more information */
+﻿/* copyright @ anyplots.com, All rights reserved, visit https://anyplots.com/ for more information */
 using System;
 using System.Threading;
 using System.IO;
@@ -25,8 +25,8 @@ namespace anyplots
                             {
                                 byte[] bytes = new byte[fs.Length];
                                 fs.Read(bytes, 0, bytes.Length);
-                                int crc = BlockTransfer.CRC(bytes, bytes.Length) ;
-                                ver = "2022010901@" + crc.ToString("x8");
+                                int crc = BlockTransfer.CRC(bytes, bytes.Length);
+                                ver = "2022020901@" + crc.ToString("x8");
                             }
                         }
                     }
@@ -49,7 +49,7 @@ namespace anyplots
                 if (args.ExceptionObject != null)
                 {
                     Exception e = (Exception)args.ExceptionObject;
-                    ApiController.Logging(false,0,"Error caught : " + e.Message);
+                    ApiController.Logging(false, 0, "Error caught : " + e.Message);
                     ApiController.Logging(true, 0, "MyHandler1:" + args.IsTerminating + "\r\n" + e.Message + "\r\n" + e.StackTrace);
                 }
                 else
@@ -60,7 +60,7 @@ namespace anyplots
             }
             catch { }
         }
-        
+
         static FileStream fslock = null;
         static FileStream LockFile(string file)
         {
@@ -79,13 +79,13 @@ namespace anyplots
         }
         static void InitClient()
         {
-            foreach (string file in Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory,"*.client"))
+            foreach (string file in Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, "*.client"))
             {
-                FileStream lock_ = LockFile(file) ;
+                FileStream lock_ = LockFile(file);
                 if (lock_ != null)
                 {
                     string token = Path.GetFileNameWithoutExtension(file);
-                    if(token != ApiController.Login(ApiController.ProjectToken, token))
+                    if (token != ApiController.Login(ApiController.ProjectToken, token))
                     {
                         lock_.Close();
                         File.Delete(file);
@@ -225,7 +225,7 @@ namespace anyplots
                         throw new Exception("Bandwidth not set");
                     }
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
 
                     Console.WriteLine("Bad arguments!" + ex.Message);
@@ -235,7 +235,7 @@ namespace anyplots
                 }
             }
             InitClient();
-            ApiController.Logging(false,0,"client token:" + ApiController.ClientToken);
+            ApiController.Logging(false, 0, "client token:" + ApiController.ClientToken);
             Run();
         }
         static long GetFreeSpace(string path)
@@ -246,7 +246,7 @@ namespace anyplots
             }
             catch (Exception ex)
             {
-                ApiController.Logging(false,0,ex.Message);
+                ApiController.Logging(false, 0, ex.Message);
             }
             return 0;
         }
@@ -278,7 +278,7 @@ namespace anyplots
             }
             catch (Exception ex)
             {
-                ApiController.Logging(false,0,ex.Message + ex.StackTrace);
+                ApiController.Logging(false, 0, ex.Message + ex.StackTrace);
                 return false;
             }
             finally
@@ -364,13 +364,14 @@ namespace anyplots
                     ApiController.Logging(true, fileid, dir + "\r\n" + ex.Message + "\r\n" + ex.StackTrace);
                 }
             }
-            ApiController.Logging(true, fileid,"No space");
+            ApiController.Logging(true, fileid, "No space");
             return null;
         }
         static void Run()
         {
             string lastname = "";
             int fileid = 0;
+            int errors = 0;
             while (true)
             {
                 try
@@ -416,7 +417,7 @@ namespace anyplots
                             ApiController.Logging(false, fileid, "Start downloading: " + filename);
                             using (PlotWriter writer = GetPlotWriter(fileid, filename, filesize))
                             {
-                                if(writer == null)
+                                if (writer == null)
                                 {
                                     ApiController.Logging(true, fileid, "Download Failed: " + filename + ", it will auto try again in 300 seconds.");
                                     Thread.Sleep(300000);
@@ -425,13 +426,23 @@ namespace anyplots
                                 Client mc = new Client(url, fileid, writer);
                                 if (mc.Run())
                                 {
+                                    errors = 0;
                                     lastname = filename;
                                     ApiController.Logging(true, fileid, "Download Success: " + filename);
                                 }
                                 else
                                 {
-                                    ApiController.Logging(true, fileid, "Download Failed: " + filename + ", it will auto try again in 30 seconds.");
-                                    Thread.Sleep(30000);
+                                    errors++;
+                                    if (errors < 5)
+                                    {
+                                        ApiController.Logging(true, fileid, "Download Failed: " + filename + ", it will auto try again in 30 seconds.");
+                                        Thread.Sleep(30000);
+                                    }
+                                    else
+                                    {
+                                        ApiController.Logging(true, fileid, "Download Failed: " + filename + ", it will auto try again in 300 seconds.");
+                                        Thread.Sleep(300000);
+                                    }
                                 }
                             }
                         }
