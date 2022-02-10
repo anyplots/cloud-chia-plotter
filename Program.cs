@@ -26,7 +26,7 @@ namespace anyplots
                                 byte[] bytes = new byte[fs.Length];
                                 fs.Read(bytes, 0, bytes.Length);
                                 int crc = BlockTransfer.CRC(bytes, bytes.Length);
-                                ver = "2022020901@" + crc.ToString("x8");
+                                ver = "2022021001@" + crc.ToString("x8");
                             }
                         }
                     }

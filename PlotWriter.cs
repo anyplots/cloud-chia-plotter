@@ -166,26 +166,9 @@ namespace anyplots
         public void Finish()
         {
             ApiController.Logging(false,0,"finishing ...");
-            bool isempty = false;
-            for (int i = 0; i < 100000; i++)
+            if (Err != null || !IsCompleted)
             {
-                lock (queue)
-                {
-                    if (queue.Count == 0)
-                    {
-                        isempty = true;
-                        break;
-                    }
-                    else if(!running)
-                    {
-                        throw new Exception("writing stopped!!!");
-                    }
-                }
-                Thread.Sleep(10);
-            }
-            if (!isempty)
-            {
-                throw new Exception("waiting writing error!!!");
+                throw new Exception("error, plot not completed !!!");
             }
             Dispose();
             File.Move(dir + fileid + "." + filename + ".data" + ApiController.Ext, dir + filename);
@@ -231,6 +214,7 @@ namespace anyplots
                         foreach (Block block in blocks)
                         {
                             if (!running) return;
+                            if (block.position < downloaded.Keys[0]) continue;
                             data.Position = block.position;
                             data.Write(block.buffer, 0, block.size);
                             downloaded.Add(data.Position, true);
@@ -248,8 +232,15 @@ namespace anyplots
                         writed = 0;
                         nextflush = DateTime.Now.AddSeconds(5);
                     }
-                    Percent = (downloaded.Keys[0] + (downloaded.Count - 1) * Block.BlockSize) * 100d / FileSize;
-                    IsCompleted = downloaded.Keys[0] + Block.BlockSize >= FileSize;
+                    Percent = Math.Min(99.9999,(downloaded.Keys[0] + (downloaded.Count - 1) * Block.BlockSize) * 100d / FileSize);
+                    if(downloaded.Keys[downloaded.Count - 1] == FileSize)
+                    {
+                        IsCompleted = downloaded.Keys[downloaded.Count - 1] - downloaded.Keys[0] < Block.BlockSize;
+                        if (IsCompleted)
+                        {
+                            data.Flush();
+                        }
+                    }
                     GC.Collect();
                 }
             }
