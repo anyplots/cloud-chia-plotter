@@ -10,7 +10,7 @@ namespace anyplots
 {
     class Block
     {
-        public const int BlockSize = 1024 * 1024 * 4;
+        public const long BlockSize = 1024 * 1024 * 4;
         public long position = 0;
         public int size = 0;
         public byte[] buffer;
