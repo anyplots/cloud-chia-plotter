@@ -15,8 +15,8 @@ It does not require SSD disk or large amount of memory, and can run well on low 
 
 <br/>
 -d  directories for save plots, separate multiple directories with semicolons, such as:
-        -d  /mnt/d/;/mnt/e/;/mnt/f/
-        -d  d:\;e:\;f:\
+        -d  "/mnt/d/;/mnt/e/;/mnt/f/"
+        -d  "d:\;e:\;f:\"
 <br/>    
 -b  set your real network bandwidth/speed(Mbps), such as:
     for 500Mbps:    -b 500            , for 1000Mbps:    -b 1000  
